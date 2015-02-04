@@ -1,0 +1,250 @@
+% vim: set spell spelllang=en tw=100 et sw=4 sts=4 foldmethod=marker foldmarker={{{,}}} :
+
+\documentclass{beamer}
+
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{complexity}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage[vlined]{algorithm2e} % algorithms
+
+\usetikzlibrary{shapes, arrows, shadows, calc, positioning, fit}
+\usetikzlibrary{decorations.pathreplacing, decorations.pathmorphing, shapes.misc}
+\usetikzlibrary{tikzmark}
+
+\colorlet{screenverylightgrey}{black!2!white}
+\colorlet{screengrey}{black!30!white}
+
+\definecolor{uofgblue}{rgb}{0, 0.321569, 0.533333}
+\colorlet{uofgblue20}{uofgblue!20!white}
+\colorlet{uofgblue40}{uofgblue!40!white}
+\colorlet{uofgblue60}{uofgblue!60!white}
+\colorlet{uofgblue80}{uofgblue!80!white}
+
+\definecolor{uofgstone}{rgb}{0.498039, 0.454902, 0.403922}
+
+\definecolor{uofgtdarkgreen}{rgb}{0.380392, 0.564706, 0.501961}
+\definecolor{uofgtlightgreen}{rgb}{0.615686, 0.788235, 0.729412}
+\definecolor{uofgtyellow}{rgb}{0.85098, 0.827451, 0.643137}
+\definecolor{uofgtorange}{rgb}{0.784314, 0.694118, 0.545098}
+
+% {{{ theme things
+\useoutertheme[footline=authorinstitutetitle]{miniframes}
+\useinnertheme{rectangles}
+
+\setbeamerfont{block title}{size={}}
+\setbeamercolor*{structure}{fg=uofgblue}
+\setbeamercolor*{palette primary}{use=structure,fg=black,bg=white}
+\setbeamercolor*{palette secondary}{use=structure,fg=black,bg=uofgblue40}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=uofgblue}
+\setbeamercolor*{palette quaternary}{fg=white,bg=black}
+
+\setbeamercolor*{titlelike}{parent=palette primary}
+
+\beamertemplatenavigationsymbolsempty
+
+\tikzset{vertex/.style={draw, circle, inner sep=0pt, minimum size=0.5cm, font=\small\bfseries}}
+\tikzset{notvertex/.style={vertex, color=white, text=black}}
+\tikzset{plainvertex/.style={vertex}}
+\tikzset{selectedvertex/.style={vertex, fill=uofgblue}}
+\tikzset{vertexc1/.style={vertex, fill=uofgblue40}}
+\tikzset{vertexc2/.style={vertex, fill=uofgblue}}
+\tikzset{vertexc3/.style={vertex, fill=uofgtdarkgreen}}
+\tikzset{vertexc4/.style={vertex, fill=uofgtorange}}
+\tikzset{edge/.style={color=screengrey}}
+\tikzset{bedge/.style={ultra thick}}
+\tikzset{edgel1/.style={ultra thick, color=uofgblue}}
+\tikzset{edgel2/.style={ultra thick, color=uofgblue40}}
+\tikzset{edgel3/.style={ultra thick, color=uofgtdarkgreen}}
+\tikzset{edgel4/.style={ultra thick, color=uofgtorange}}
+
+\setbeamertemplate{title page}
+{
+    \vbox{}
+    \vspace*{0.5cm}
+    \begin{center}
+        {\usebeamerfont{title}\inserttitle\par}
+        \vskip0.5cm\par
+        \begin{beamercolorbox}[sep=8pt,center]{author}
+            \usebeamerfont{author}\insertauthor
+        \end{beamercolorbox}
+        {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+    \end{center}
+    \vfill
+
+    \begin{tikzpicture}[remember picture, overlay]
+        \node at (current page.north west) {\begin{tikzpicture}[remember picture, overlay]\fill
+        [fill=uofgblue, anchor=north west] (0, 0) rectangle (\paperwidth, -1.5cm);\end{tikzpicture}};
+        \node [anchor=north west, shift={(0.2cm,-0.2cm)}] at (current page.north west) {\includegraphics*[keepaspectratio=true,scale=0.5]{UoG_keyline.eps}};
+    \end{tikzpicture}
+}
+
+% }}}
+
+\title{The Subgraph Isomorphism Problem: \\ Three New Ideas}
+\author[Ciaran McCreesh]{\textcolor{uofgblue}{Ciaran McCreesh} and Patrick Prosser}
+
+\begin{document}
+
+{
+    \usebackgroundtemplate{\includegraphics*[keepaspectratio=true, height=\paperheight]{background.jpg}}
+    \begin{frame}[plain]
+        \titlepage
+    \end{frame}
+}
+
+\begin{frame}{The Subgraph Isomorphism Problem}
+
+\end{frame}
+
+\begin{frame}{A CP-Like Model and Algorithm}
+
+\end{frame}
+
+\begin{frame}{Supplemental Graphs}
+
+\end{frame}
+
+\begin{frame}{Propagating All-Different}
+
+    \only<1>{
+        When assigning $D_v \gets v'$, remove $v'$ from every other domain. If a domain ends up
+        being empty, fail and backtrack.
+    }
+
+    \only<2>{
+        Assignment graph, max cardinality matching. If no matching exists, backtrack. If a matching
+        exists, remove any edge (and hence variable-value pair) which cannot appear in any maximum
+        cardinality matching.
+    }
+
+    \only<3>{
+        Hall sets
+    }
+
+    \only<4>{
+        Go through each domain, from smallest to largest, and take the union as we go along. If we
+        reach a ``failed'' Hall set (less than $n$ values for the $n$ domains we've seen so far),
+        fail. If we reach a Hall set, remove all these values from every remaining domain, reset the
+        counters, and keep going.
+    }
+
+\end{frame}
+
+\begin{frame}{Variable-Directed Backjumping}
+
+    \only<1>{
+        \begin{itemize}
+            \item When we hit a failure, we could backtrack.
+            \item Maybe the previous assignment didn't contribute to the failure, though.
+        \end{itemize}
+    }
+
+    \only<2>{
+        \begin{itemize}
+            \item Conflict-directed backjumping keeps a conflict set for each variable. We track
+                which assignments removed a value from a variable. When we backtrack, if we did not
+                cause the failure, we can keep going backwards.
+
+            \item But copying conflict sets gives a performance hit inside a ``fast and dumb''
+                algorithm.
+        \end{itemize}
+    }
+
+    \only<3>{
+        \begin{itemize}
+            \item When we assign and fail, return which variables were involved in the failing
+                constraint.
+
+            \item When we cannot find any value to assign to a variable, return the union of the
+                variables in failed sub-searches, plus ourself. (Intuition: we might be able to
+                succeed, if either we had another value, or if another problematic variable had
+                another value.)
+
+            \item When a search subproblem fails, determine whether the assignment we just made
+                removed any values from any of the failing variables. If not, jump back another step
+                straight away.
+
+                \begin{itemize}
+                    \item We don't need to track any additional information to do this, because we
+                        have both the domains we were given, and the clone which has had propagation
+                        applied to it.
+                \end{itemize}
+        \end{itemize}
+    }
+
+    \only<4>{
+        \begin{itemize}
+            \item AllDifferent(D) implies AllDifferent(D') for any subset D' of D.
+
+            \item If we can produce a small failed Hall set, we might be able to jump back further.
+
+            \item We can just return the variables that we've seen so far.
+                \begin{itemize}
+                    \item This sometimes helps a lot in practice.
+                    \item Maybe we could do more work to find an even better (not necessarily
+                        smaller) set?
+                \end{itemize}
+        \end{itemize}
+    }
+
+\end{frame}
+
+\begin{frame}{Preliminary Results}
+
+    \only<1>{
+        \begin{itemize}
+            \item VF2: widely used, and extremely fast on small, sparse, low degree graphs. But if
+                it doesn't find a result within ten milliseconds, it is unlikely to find a result
+                within a day.
+
+            \item LAD and SND: very clever CP-like algorithms with deep reasoning. But for some
+                larger target graphs, a single propagation takes over a second.
+
+            \item We do much less reasoning, but can manage $>100,000$ propagations per second.
+        \end{itemize}
+    }
+
+    \only<2>{
+        Cumulative curves
+    }
+
+    \only<3>{
+        Per-instance results
+    }
+
+    \only<4>{
+        How good is backjumping?
+    }
+
+    \only<5>{
+        How good is our weaker all-different propagation?
+    }
+\end{frame}
+
+\begin{frame}{What's Next?}
+
+    \begin{itemize}
+        \item Other supplemental graphs
+        \item Thread parallelism (fiddly but possible with backjumping)
+        \item All the variants (labels, directed edges, induced, \ldots)
+        \item Portfolios and instance-specific configuration
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}[b]
+    \begin{center}
+    \url{http://dcs.gla.ac.uk/~ciaran} \\
+    \href{mailto:c.mccreesh.1@research.gla.ac.uk}{\nolinkurl{c.mccreesh.1@research.gla.ac.uk}}
+\end{center}
+\begin{tikzpicture}[remember picture, overlay]
+    \node at (current page.north west) {\begin{tikzpicture}[remember picture, overlay]\fill
+    [fill=uofgblue, anchor=north west] (0, 0) rectangle (\paperwidth, -1.5cm);\end{tikzpicture}};
+    \node [anchor=north west, shift={(0.2cm,-0.2cm)}] at (current page.north west) {\includegraphics*[keepaspectratio=true,scale=0.5]{UoG_keyline.eps}};
+\end{tikzpicture}
+\end{frame}
+
+\end{document}
+
