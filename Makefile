@@ -3,7 +3,7 @@ all : tables graphs
 
 TABLES =
 
-GRAPHS =
+GRAPHS = gen-graph-cumulative.tex gen-graph-best-other.tex gen-graph-backjumping.tex gen-graph-fad.tex gen-graph-features.tex
 
 tables : $(TABLES)
 

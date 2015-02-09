@@ -7,6 +7,10 @@
 \usepackage{complexity}
 \usepackage{hyperref}
 \usepackage{microtype}
+\usepackage{amsmath}                   % \operatorname
+\usepackage{amsfonts}                  % \mathcal
+\usepackage{amssymb}                   % \nexists
+\usepackage{gnuplot-lua-tikz}          % graphs
 \usepackage[vlined]{algorithm2e} % algorithms
 
 \usetikzlibrary{shapes, arrows, shadows, calc, positioning, fit}
@@ -62,7 +66,6 @@
 \setbeamertemplate{title page}
 {
     \vbox{}
-    \vspace*{0.5cm}
     \begin{center}
         {\usebeamerfont{title}\inserttitle\par}
         \vskip0.5cm\par
@@ -82,7 +85,7 @@
 
 % }}}
 
-\title{The Subgraph Isomorphism Problem: \\ Three New Ideas}
+\title[The Subgraph Isomorphism Problem: Three New Ideas]{The Subgraph Isomorphism Problem: \\ Three New Ideas}
 \author[Ciaran McCreesh]{\textcolor{uofgblue}{Ciaran McCreesh} and Patrick Prosser}
 
 \begin{document}
@@ -94,144 +97,241 @@
     \end{frame}
 }
 
+\section{Subgraph Isomorphism}
+
 \begin{frame}{The Subgraph Isomorphism Problem}
+
+    \begin{itemize}
+        \item Given a little \emph{pattern} graph and a large \emph{target} graph, find ``a copy
+            of'' the pattern inside the target.
+
+        \item We'll look at the \emph{non-induced} or \emph{monomorphism} variation: find an
+            injective mapping that preserves adjacency, but not necessarily non-adjacency.
+    \end{itemize}
 
 \end{frame}
 
 \begin{frame}{A CP-Like Model and Algorithm}
 
+    \begin{itemize}
+        \item One variable per vertex in the pattern graph. The domain is the vertex in the target
+            graph that it gets mapped to.
+
+            \begin{itemize}
+                \item Reduce domains at the top of search using neighbourhood degree sequences.
+            \end{itemize}
+
+        \item For each adjacent pair of vertices in the pattern graph, their values must be adjacent
+            in the target graph.
+
+        \item All variables have different values.
+    \end{itemize}
+
+\end{frame}
+
+\section{Supplemental Graphs}
+
+\begin{frame}{Distance-Based Filtering}
+
+    \begin{itemize}
+        \item If two vertices are distance $d$ apart in the pattern graph, they can only be mapped
+            to a pair of vertices which are within distance $d$ (or less) in the target graph.
+
+        \item Equivalently: a monomorphism $i : P \hookrightarrow T$ is also a monomorphism $i^d
+            : P^d \hookrightarrow T^d$, where $G^d$ is the graph with the same vertex set as
+            $G$, and an edge between $v$ and $w$ if the distance between $v$ and $w$ in $G$ is
+            at most $d$.
+
+        \item This allows us to generate implied constraints: we're now trying to find a
+            mapping $i$ which is simultaneously a monomorphism $i : P \hookrightarrow T$, and
+            $i^2 : P^2 \hookrightarrow T^2$, and $i^3 : P^3 \hookrightarrow T^3$, and so on.
+
+            \begin{itemize}
+                \item So it's safe to use neighbourhood degree sequences, etc, in these graphs too.
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Path-Based Filtering}
+    \begin{itemize}
+        \item In practice, this only seems to be useful for $d \le 3$.
+
+        \item Stronger: if two vertices in the pattern graph are connected by $k$ (simple) paths of
+            length exactly $d$, then they can only be mapped to a pair of vertices which have at
+            least $k$ paths of length exactly $d$ between them.
+
+        \item We can view this as a graph transformation too. Let $G^{\left[d, k\right]}$ be the
+            graph with the same vertex set as $G$, and an edge between $v$ and $w$ if there are at
+            least $k$ paths of length exactly $d$ between $v$ and $w$ in $G$.
+
+        \item This is \NP-hard to produce in general, but for $d \le 3$ and small $k$ we can
+            calculate it quickly in practice.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Supplemental Graphs}
+    \begin{itemize}
+        \item We just build these graphs once, at the top of search.
 
+        \item Other transformations are sometimes helpful too. We can either pick a good,
+            general set, or use domain knowledge.
+
+        \item Different transformations are helpful for other variations of the problem
+            (induced, directed, labels, etc).
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{Propagating All-Different}
+\section{Counting All-Different}
 
-    \only<1>{
-        When assigning $D_v \gets v'$, remove $v'$ from every other domain. If a domain ends up
-        being empty, fail and backtrack.
-    }
+\begin{frame}{Enforcing All-Different}
+    \begin{itemize}
+        \item When assigning $D_v \gets w$, remove $w$ from every other domain. If a domain ends up
+            being empty, fail and backtrack.
 
-    \only<2>{
-        Assignment graph, max cardinality matching. If no matching exists, backtrack. If a matching
-        exists, remove any edge (and hence variable-value pair) which cannot appear in any maximum
-        cardinality matching.
-    }
+        \item This enforces the constraint, but does not provide much additional inference.
+    \end{itemize}
+\end{frame}
 
-    \only<3>{
-        Hall sets
-    }
+\begin{frame}{All-Different Filtering via Matching}
+    \begin{itemize}
+        \item Build a bipartite graph, with variables on the left, values on
+            the right, and edges for allowed assignments.
 
-    \only<4>{
-        Go through each domain, from smallest to largest, and take the union as we go along. If we
-        reach a ``failed'' Hall set (less than $n$ values for the $n$ domains we've seen so far),
-        fail. If we reach a Hall set, remove all these values from every remaining domain, reset the
-        counters, and keep going.
-    }
+        \item Find a matching that covers every variable, or fail and backtrack if there isn't
+            one.
 
+        \item Remove every edge (variable-value assignment pair) which cannot occur in any
+            maximum cardinality matching.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Hall Sets}
+    \begin{itemize}
+        \item Why can we do this? If we have a subset of $n$ variables, whose domains include
+            exactly $n$ values between them, then those values can \emph{only} be used by those
+            variables.
+
+        \item This is called a Hall set.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{All-Different Filtering via Counting}
+    \begin{itemize}
+        \item Go through each variable, from smallest domain to largest, and take the union of
+            the domains as we go along.
+
+        \item If we reach a ``failed'' Hall set (less than $n$ values for the $n$ domains we've
+            seen so far), fail.
+
+        \item If we reach a Hall set, remove all these values from every remaining domain, reset
+            the counters, and keep going.
+
+        \item This is much faster, but may miss some deletions that matching would find.
+    \end{itemize}
+\end{frame}
+
+\section{Backjumping}
+
+\begin{frame}{Backtracking is Dumb}
+    \begin{itemize}
+        \item When we hit a failure, we could backtrack.
+        \item Maybe the previous assignment didn't contribute to the failure, though.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conflict-Directed Backjumping}
+    \begin{itemize}
+        \item Conflict-directed backjumping keeps a conflict set for each variable. We track
+            which assignments removed a value from a variable. When we backtrack, if we did not
+            cause the failure, we can keep going backwards.
+
+        \item But copying conflict sets gives a performance hit inside a ``fast and dumb''
+            algorithm.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Variable-Directed Backjumping}
+    \begin{itemize}
+        \item When we assign and fail, return which variables were involved in the failing
+            constraint.
 
-    \only<1>{
-        \begin{itemize}
-            \item When we hit a failure, we could backtrack.
-            \item Maybe the previous assignment didn't contribute to the failure, though.
-        \end{itemize}
-    }
+        \item When we cannot find any value to assign to a variable, return the union of the
+            variables in failed sub-searches, plus ourself. (Intuition: we might be able to
+            succeed, if either we had another value, or if another problematic variable had
+            another value.)
 
-    \only<2>{
-        \begin{itemize}
-            \item Conflict-directed backjumping keeps a conflict set for each variable. We track
-                which assignments removed a value from a variable. When we backtrack, if we did not
-                cause the failure, we can keep going backwards.
+        \item When a search subproblem fails, determine whether the assignment we just made
+            removed any values from any of the failing variables. If not, jump back another step
+            straight away.
 
-            \item But copying conflict sets gives a performance hit inside a ``fast and dumb''
-                algorithm.
-        \end{itemize}
-    }
-
-    \only<3>{
-        \begin{itemize}
-            \item When we assign and fail, return which variables were involved in the failing
-                constraint.
-
-            \item When we cannot find any value to assign to a variable, return the union of the
-                variables in failed sub-searches, plus ourself. (Intuition: we might be able to
-                succeed, if either we had another value, or if another problematic variable had
-                another value.)
-
-            \item When a search subproblem fails, determine whether the assignment we just made
-                removed any values from any of the failing variables. If not, jump back another step
-                straight away.
-
-                \begin{itemize}
-                    \item We don't need to track any additional information to do this, because we
-                        have both the domains we were given, and the clone which has had propagation
-                        applied to it.
-                \end{itemize}
-        \end{itemize}
-    }
-
-    \only<4>{
-        \begin{itemize}
-            \item AllDifferent(D) implies AllDifferent(D') for any subset D' of D.
-
-            \item If we can produce a small failed Hall set, we might be able to jump back further.
-
-            \item We can just return the variables that we've seen so far.
-                \begin{itemize}
-                    \item This sometimes helps a lot in practice.
-                    \item Maybe we could do more work to find an even better (not necessarily
-                        smaller) set?
-                \end{itemize}
-        \end{itemize}
-    }
-
+            \begin{itemize}
+                \item We don't need to track any additional information to do this, because we
+                    have both the domains we were given, and the clone which has had propagation
+                    applied to it.
+            \end{itemize}
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{Preliminary Results}
+\begin{frame}{Backjumping plus All-Different}
+    \begin{itemize}
+        \item All-different(D) implies all-different(D') for any subset D' of D.
 
-    \only<1>{
-        \begin{itemize}
-            \item VF2: widely used, and extremely fast on small, sparse, low degree graphs. But if
-                it doesn't find a result within ten milliseconds, it is unlikely to find a result
-                within a day.
+        \item If we can produce a small failed Hall set, we might be able to jump back further.
 
-            \item LAD and SND: very clever CP-like algorithms with deep reasoning. But for some
-                larger target graphs, a single propagation takes over a second.
+        \item We can just return the variables that we've seen so far.
+            \begin{itemize}
+                \item This sometimes helps a lot in practice.
+                \item Maybe we could do more work to find an even better (not necessarily
+                    smaller) set?
+            \end{itemize}
+    \end{itemize}
+\end{frame}
 
-            \item We do much less reasoning, but can manage $>100,000$ propagations per second.
-        \end{itemize}
-    }
+\section{Preliminary Results}
 
-    \only<2>{
-        Cumulative curves
-    }
+\begin{frame}{The Competition}
+    \begin{itemize}
+        \item VF2: widely used, and extremely fast on small, sparse, low degree graphs. But if
+            it doesn't find a result within ten milliseconds, it is unlikely to find a result
+            within a day.
 
-    \only<3>{
-        Per-instance results
-    }
+        \item LAD and SND: very clever CP-like algorithms with deep reasoning. But for some
+            larger target graphs, a single propagation takes over a second.
+            \begin{itemize}
+                \item We do much less reasoning, but can manage $>100,000$ propagations per second.
+            \end{itemize}
 
-    \only<4>{
-        How good is backjumping?
-    }
+        \item 2063 standard benchmark instances.
+    \end{itemize}
+\end{frame}
 
-    \only<5>{
-        How good is our weaker all-different propagation?
-    }
+\begin{frame}{Cumulative Performance}
+    \input{gen-graph-cumulative}
+\end{frame}
+
+\begin{frame}{Per-Instance Comparison}
+    \input{gen-graph-best-other}
+\end{frame}
+
+\begin{frame}{Is Each Feature Helpful?}
+    \input{gen-graph-features}
+\end{frame}
+
+\begin{frame}{Is Backjumping Any Good?}
+    \input{gen-graph-backjumping}
+\end{frame}
+
+\begin{frame}{How Much Worse is Counting All-Different?}
+    \input{gen-graph-fad}
 \end{frame}
 
 \begin{frame}{What's Next?}
-
     \begin{itemize}
-        \item Other supplemental graphs
         \item Thread parallelism (fiddly but possible with backjumping)
         \item All the variants (labels, directed edges, induced, \ldots)
-        \item Portfolios and instance-specific configuration
+        \item Portfolios and instance-specific algorithm configuration
+        \item Other supplemental graphs
     \end{itemize}
-
 \end{frame}
 
 \begin{frame}[b]
