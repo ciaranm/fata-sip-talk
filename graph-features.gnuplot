@@ -27,10 +27,10 @@ set arrow from 60e3,1910 to 60e3,2030 front nohead
 set arrow from 86400e3,1910 to 86400e3,2030 front nohead
 
 plot \
-    "graph-cumulative.data" u ($4):($4 >= 1e8 ? 1e-10 : 1) smooth cumulative notitle lc 1, \
-    "graph-cumulative.data" u ($3):($3 >= 1e8 ? 1e-10 : 1) smooth cumulative notitle lc 4, \
-    "graph-cumulative.data" u ($5):($5 >= 1e8 ? 1e-10 : 1) smooth cumulative notitle lc 7, \
-    "graph-cumulative.data" u ($6):($6 >= 1e8 ? 1e-10 : 1) smooth cumulative notitle lc 6
+    "graph-cumulative.data" u ($4):($4 >= 1e8 ? 1e-10 : 1) smooth cumulative notitle lc 4, \
+    "graph-cumulative.data" u ($3):($3 >= 1e8 ? 1e-10 : 1) smooth cumulative notitle lc 2, \
+    "graph-cumulative.data" u ($5):($5 >= 1e8 ? 1e-10 : 1) smooth cumulative notitle lc 1, \
+    "graph-cumulative.data" u ($6):($6 >= 1e8 ? 1e-10 : 1) smooth cumulative notitle lc 3
 
 set size 0.4, 0.5
 set origin 0.6, 0.3
@@ -49,9 +49,9 @@ set ylabel ""
 set grid xtics ytics mytics
 
 plot \
-    "graph-cumulative.data" u ($4 >= 86400e3 ? 86400e3 : $4):($4 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{1.4mm}{All}' at end lc 1, \
-    "graph-cumulative.data" u ($3 >= 86400e3 ? 86400e3 : $3):($3 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{-0.65mm}{No Backjumping}' at end lc 4, \
-    "graph-cumulative.data" u ($5 >= 86400e3 ? 86400e3 : $5):($5 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{0mm}{No Supplementals}' at end lc 7, \
-    "graph-cumulative.data" u ($6 >= 86400e3 ? 86400e3 : $6):($6 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{1.1mm}{No Counting}' at end lc 6
+    "graph-cumulative.data" u ($4 >= 86400e3 ? 86400e3 : $4):($4 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{1.4mm}{All}' at end lc 4, \
+    "graph-cumulative.data" u ($3 >= 86400e3 ? 86400e3 : $3):($3 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{-0.65mm}{No Backjumping}' at end lc 2, \
+    "graph-cumulative.data" u ($5 >= 86400e3 ? 86400e3 : $5):($5 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{0mm}{No Supplementals}' at end lc 1, \
+    "graph-cumulative.data" u ($6 >= 86400e3 ? 86400e3 : $6):($6 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{1.1mm}{No Counting}' at end lc 3
 
 unset multiplot

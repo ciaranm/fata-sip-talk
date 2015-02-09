@@ -10,8 +10,8 @@ set key outside right center height 1 spacing 1.2
 
 set border 3
 
-set xlabel "Recursive calls with counting-based all-different"
-set ylabel "Recursive calls with matching-based all-different"
+set xlabel "Recursive calls with counting all-different"
+set ylabel "Recursive calls with matching all-different"
 set logscale xy
 set xtics nomirror
 set ytics nomirror

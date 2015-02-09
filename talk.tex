@@ -34,7 +34,7 @@
 \definecolor{uofgtorange}{rgb}{0.784314, 0.694118, 0.545098}
 
 % {{{ theme things
-\useoutertheme[footline=authorinstitutetitle]{miniframes}
+\useoutertheme[footline=authortitle]{miniframes}
 \useinnertheme{rectangles}
 
 \setbeamerfont{block title}{size={}}
@@ -83,6 +83,30 @@
     \end{tikzpicture}
 }
 
+\newcommand{\frameofframes}{/}
+\newcommand{\setframeofframes}[1]{\renewcommand{\frameofframes}{#1}}
+
+\makeatletter
+\setbeamertemplate{footline}
+{%
+    \begin{beamercolorbox}[colsep=1.5pt]{upper separation line foot}
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+        leftskip=.3cm,rightskip=.3cm plus1fil]{author in head/foot}%
+        \leavevmode{\usebeamerfont{author in head/foot}\insertshortauthor}%
+        \hfill%
+        {\usebeamerfont{institute in head/foot}\usebeamercolor[fg]{institute in head/foot}\insertshortinstitute}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+        leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+        {\usebeamerfont{title in head/foot}\insertshorttitle}%
+        \hfill%
+        {\usebeamerfont{frame number}\usebeamercolor[fg]{frame number}\insertframenumber~\frameofframes~\inserttotalframenumber}
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[colsep=1.5pt]{lower separation line foot}
+    \end{beamercolorbox}
+}
+
 % }}}
 
 \title[The Subgraph Isomorphism Problem: Three New Ideas]{The Subgraph Isomorphism Problem: \\ Three New Ideas}
@@ -92,7 +116,7 @@
 
 {
     \usebackgroundtemplate{\includegraphics*[keepaspectratio=true, height=\paperheight]{background.jpg}}
-    \begin{frame}[plain]
+    \begin{frame}[plain,noframenumbering]
         \titlepage
     \end{frame}
 }
@@ -111,7 +135,7 @@
 
 \end{frame}
 
-\begin{frame}{A CP-Like Model and Algorithm}
+\begin{frame}{A CP-Like Model}
 
     \begin{itemize}
         \item One variable per vertex in the pattern graph. The domain is the vertex in the target
@@ -126,6 +150,10 @@
 
         \item All variables have different values.
     \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Backtracking Search}
 
 \end{frame}
 
@@ -181,6 +209,12 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Is This Actually New?}
+    \begin{itemize}
+        \item SND uses distances for filtering, but not via $G^d$.
+    \end{itemize}
+\end{frame}
+
 \section{Counting All-Different}
 
 \begin{frame}{Enforcing All-Different}
@@ -227,6 +261,21 @@
             the counters, and keep going.
 
         \item This is much faster, but may miss some deletions that matching would find.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Is This Actually New?}
+    \begin{itemize}
+        \item Counting as preprocessing has been done Claude-Guy Quimper and Toby Walsh, in the
+            context of set variables, but they use it to determine whether it's worth trying a
+            matching.
+
+        \item Larossa and Valiente counted neighbours for SIP.
+
+        \item There are other propagators for bounds consistency.
+
+        \item I can't find this variation in the literature, possibly because it doesn't enforce any
+            particular kind of consistency.
     \end{itemize}
 \end{frame}
 
@@ -287,7 +336,24 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Is This Actually New?}
+    \begin{itemize}
+        \item Neil Moore implemented lazy explanation generation for CP, but in a different way.
+
+        \item Guillaume Rochart, Narendra Jussien and François Laburthe worked out better
+            explanations for all-different via flows, in the context of interactive CP.
+    \end{itemize}
+\end{frame}
+
 \section{Preliminary Results}
+
+\begin{frame}{Is This Any Good?}
+    \begin{itemize}
+        \item Fast and dumb isn't really fashionable for CP.
+
+        \item Backjumping isn't fashionable anywhere\ldots
+    \end{itemize}
+\end{frame}
 
 \begin{frame}{The Competition}
     \begin{itemize}
@@ -325,12 +391,18 @@
     \input{gen-graph-fad}
 \end{frame}
 
+\section{}
+
 \begin{frame}{What's Next?}
     \begin{itemize}
         \item Thread parallelism (fiddly but possible with backjumping)
         \item All the variants (labels, directed edges, induced, \ldots)
-        \item Portfolios and instance-specific algorithm configuration
         \item Other supplemental graphs
+            \begin{itemize}
+                \item I can concoct additional supplemental graphs which can close half of the
+                    remaining open instances, but they're rather specific to the instances.
+            \end{itemize}
+        \item Portfolios and instance-specific algorithm configuration?
     \end{itemize}
 \end{frame}
 
