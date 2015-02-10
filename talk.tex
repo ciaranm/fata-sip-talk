@@ -226,7 +226,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{All-Different Filtering via Matching}
+\begin{frame}{R\'egin's Matching-Based All-Different Filtering}
     \begin{itemize}
         \item Build a bipartite graph, with variables on the left, values on
             the right, and edges for allowed assignments.
@@ -266,11 +266,10 @@
 
 \begin{frame}{Is This Actually New?}
     \begin{itemize}
-        \item Counting as preprocessing has been done Claude-Guy Quimper and Toby Walsh, in the
-            context of set variables, but they use it to determine whether it's worth trying a
-            matching.
+        \item Claude-Guy Quimper and Toby Walsh used counting as preprocessing in the context of set
+            variables, but they use it to determine whether it's worth trying a matching.
 
-        \item Larossa and Valiente counted neighbours for SIP.
+        \item Javier Larrosa and Gabriel Valiente counted neighbours for SIP.
 
         \item There are other propagators for bounds consistency.
 
@@ -391,11 +390,30 @@
     \input{gen-graph-fad}
 \end{frame}
 
+\begin{frame}{Very Quick Attempt at Threaded Tree-Search}
+    \only<1> {
+        \begin{itemize}
+            \item Half an hour's coding to check that the idea is sane.
+            \item Distance 1 splitting to a queue, no extra load balancing yet.
+            \item No parallelisation of supplemental graph construction yet.
+            \item Speculative parallelism, so linear speedup should not be expected.
+                \begin{itemize}
+                    \item Not even for unsat instances, due to backjumping!
+                \end{itemize}
+            \item 16 threads.
+        \end{itemize}
+    }
+
+    \only<2> {
+        \input{gen-graph-speedup}
+    }
+\end{frame}
+
 \section{}
 
 \begin{frame}{What's Next?}
     \begin{itemize}
-        \item Thread parallelism (fiddly but possible with backjumping)
+        \item Proper thread parallelism (fiddly but possible with backjumping)
         \item All the variants (labels, directed edges, induced, \ldots)
         \item Other supplemental graphs
             \begin{itemize}
