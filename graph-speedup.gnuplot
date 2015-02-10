@@ -22,6 +22,9 @@ set grid
 set format x '$10^{%T}$'
 set format y '$10^{%T}$'
 
+set arrow from 2e7,5.8e2 to 8e7,5.8e2 lw 1 back filled
+set label 1 'EHP' at 2e7,5.8e2 right offset character 0.1,character 0
+
 plot \
     "graph-speedup.data" u (($2 == 0 && $3 == 2) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 7 lc 1 notitle, \
     "graph-speedup.data" u (($2 == 1 && $3 == 2) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 6 lc 1 notitle, \
