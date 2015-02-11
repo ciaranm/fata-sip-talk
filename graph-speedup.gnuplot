@@ -22,8 +22,12 @@ set grid
 set format x '$10^{%T}$'
 set format y '$10^{%T}$'
 
-set arrow from 2e7,5.8e2 to 8e7,5.8e2 lw 1 back filled
+set arrow from 2e7,5.8e2 to 8e7,5.8e2 lw 1 front  filled
 set label 1 'EHP' at 2e7,5.8e2 right offset character 0.1,character 0
+
+set arrow from 5e4,4e5 to 2.55e5,1.8e5 lw 1 front filled
+set arrow from 5e4,5e5 to 8.5e5,4.7e5 lw 1 front filled
+set label 2 'Better balance needed' at 5.2e4,5.5e5 right offset character 0.1,character 0
 
 plot \
     "graph-speedup.data" u (($2 == 0 && $3 == 2) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 7 lc 1 notitle, \
