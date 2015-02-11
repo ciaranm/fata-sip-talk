@@ -49,7 +49,7 @@ set ylabel ""
 set grid xtics ytics mytics
 
 plot \
-    "graph-cumulative.data" u ($4 >= 86400e3 ? 86400e3 : $4):($4 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{1.4mm}{All}' at end lc 4, \
+    "graph-cumulative.data" u ($4 >= 86400e3 ? 86400e3 : $4):($4 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{1.4mm}{Sequential}' at end lc 4, \
     "graph-cumulative.data" u ($3 >= 86400e3 ? 86400e3 : $3):($3 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{-0.65mm}{No Backjumping}' at end lc 2, \
     "graph-cumulative.data" u ($5 >= 86400e3 ? 86400e3 : $5):($5 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{0mm}{No Supplementals}' at end lc 1, \
     "graph-cumulative.data" u ($6 >= 86400e3 ? 86400e3 : $6):($6 >= 86400e3 ? 1e-10 : 1) smooth cumulative ti '\raisebox{1.1mm}{No Counting}' at end lc 3
