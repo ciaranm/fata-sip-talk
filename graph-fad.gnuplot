@@ -16,8 +16,8 @@ set logscale xy
 set xtics nomirror
 set ytics nomirror
 set grid
-set xrange [1:1e10]
-set yrange [1:1e10]
+set xrange [1:1e11]
+set yrange [1:1e11]
 set grid xtics ytics mxtics mytics
 set format x '$10^{%T}$'
 set format y '$10^{%T}$'

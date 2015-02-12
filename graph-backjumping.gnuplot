@@ -21,6 +21,9 @@ set yrange [1:1e8]
 set format x '$10^{%T}$'
 set format y '$10^{%T}$'
 
+set label 1 'All heavily structured' at 1e7,2e2 right offset character 0.6, character 0
+set arrow from 1e7,2e2 to 7e7,3e2 lw 1 back filled
+
 plot \
     "graph-backjumping.data" u (($2 == 0 && $3 == 2) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 7 lc 1 notitle, \
     "graph-backjumping.data" u (($2 == 1 && $3 == 2) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 6 lc 1 notitle, \
