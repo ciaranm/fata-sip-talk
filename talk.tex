@@ -180,6 +180,22 @@
 
 \end{frame}
 
+\begin{frame}{Existing Algorithms}
+    \begin{itemize}
+        \item VF2: widely used, and extremely fast on small, sparse, low degree graphs. But if
+            it doesn't find a result within ten milliseconds, it is unlikely to find a result
+            within a day.
+
+        \item LAD and SND: very clever CP-like algorithms with deep reasoning. But for some
+            larger target graphs, a single propagation takes over a second.
+
+            \begin{itemize}
+                \item We'll do much less reasoning, but can manage $>100,000$ propagations per
+                    second.
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{A CP-Like Model}
 
     \begin{itemize}
@@ -313,8 +329,10 @@
                 $i^2 : P^2 \hookrightarrow T^2$, and $i^3 : P^3 \hookrightarrow T^3$, and so on.
 
             \item So we can filter on adjacency, degree, neighbourhood degree sequences, etc, in
-                these graphs too.  (Open question: we can take the intersection, but is there a
-                stronger operation which we can compute with reasonable complexity?)
+                these graph pairs too.
+
+            \item Open question: we can take the intersection, but is there a stronger operation
+                which we can compute with reasonable complexity?
         \end{itemize}
     }
 \end{frame}
@@ -348,11 +366,14 @@
             \begin{itemize}
                 \item We could recreate them whenever a vertex disappears from every target domain,
                     but this is costly.
+
+                \item We can cache these if we have a database of target graphs.
             \end{itemize}
 
         \item Other transformations are sometimes helpful. We can either pick a good, general set,
-            or use domain knowledge. Different transformations are helpful for other variations of
-            the problem.
+            or use domain knowledge.
+
+        \item Different transformations are helpful for other variations of the problem.
 
             \begin{itemize}
                 \item For the induced variant, we can also look at $\overline{G}$.
@@ -495,6 +516,8 @@
 
 \begin{frame}{Is This Actually New?}
     \begin{itemize}
+        \item Current subgraph isomorphism algorithms just backtrack.
+
         \item Neil Moore implemented lazy explanation generation for CP, but in a different way.
 
         \item Guillaume Rochart, Narendra Jussien and François Laburthe worked out better
@@ -511,22 +534,12 @@
         \item Fast and dumb isn't really fashionable for CP.
 
         \item Backjumping isn't fashionable anywhere\ldots
-    \end{itemize}
-\end{frame}
 
-\begin{frame}{The Competition}
-    \begin{itemize}
-        \item VF2: widely used, and extremely fast on small, sparse, low degree graphs. But if
-            it doesn't find a result within ten milliseconds, it is unlikely to find a result
-            within a day.
-
-        \item LAD and SND: very clever CP-like algorithms with deep reasoning. But for some
-            larger target graphs, a single propagation takes over a second.
+        \item We'll look at the 2063 benchmark instances used to evaluate LAD and SND.
             \begin{itemize}
-                \item We do much less reasoning, but can manage $>100,000$ propagations per second.
+                \item A mix of random, randomly structured, heavily structured, and real-world
+                    graphs.
             \end{itemize}
-
-        \item 2063 benchmark instances used to evaluate LAD and SND.
     \end{itemize}
 \end{frame}
 
