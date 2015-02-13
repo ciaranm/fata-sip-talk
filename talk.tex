@@ -83,6 +83,15 @@
     \end{tikzpicture}
 }
 
+\setbeamertemplate{section page}
+{
+    \begin{centering}
+        \begin{beamercolorbox}[sep=12pt,center]{part title}
+            \usebeamerfont{section title}\insertsection\par
+        \end{beamercolorbox}
+    \end{centering}
+}
+
 \newcommand{\frameofframes}{/}
 \newcommand{\setframeofframes}[1]{\renewcommand{\frameofframes}{#1}}
 
@@ -148,12 +157,14 @@
         \draw [bedge] (Pd) -- (Pb);
         \draw [bedge] (Pa) -- (Pc);
 
-        \node [vertex]   (T1) at (3.13, 0.5) { 1 };
-        \node [vertexc1] (T5) at (4, 0) { 5 };
-        \node [vertexc2] (T6) at (5, 0) { 6 };
-        \node [vertexc3] (T3) at (5, 1) { 3 };
-        \node [vertexc4] (T2) at (4, 1) { 2 };
-        \node [vertex]   (T4) at (5.87, 0.5) { 4 };
+        \node [anchor=center, font=\huge] at (2.565, 0.5) { $\hookrightarrow$ };
+
+        \node [vertex]   (T1) at (4.13, 0.5) { 1 };
+        \node [vertexc1] (T5) at (5, 0) { 5 };
+        \node [vertexc2] (T6) at (6, 0) { 6 };
+        \node [vertexc3] (T3) at (6, 1) { 3 };
+        \node [vertexc4] (T2) at (5, 1) { 2 };
+        \node [vertex]   (T4) at (6.87, 0.5) { 4 };
 
         \draw [edge]  (T1) -- (T2);
         \draw [edge]  (T1) -- (T5);
@@ -180,41 +191,150 @@
 
         \item All variables have different values.
 
-        \item Now we can do a backtracking search.
+        \item We can filter initial domains using degree, neighbourhood degree sequence, loops,
+            \ldots
     \end{itemize}
 
 \end{frame}
 
 \section{Supplemental Graphs}
 
+\frame{\sectionpage}
+
 \begin{frame}{Distance-Based Filtering}
 
-    \begin{itemize}
-        \item If two vertices are distance $d$ apart in the pattern graph, they can only be mapped
-            to a pair of vertices which are within distance $d$ (or less) in the target graph.
+    \only<1> {
+        \begin{itemize}
+            \item If two vertices are distance $d$ apart in the pattern graph, they can only be mapped
+                to a pair of vertices which are within distance $d$ (or less) in the target graph.
+        \end{itemize}
 
-        \item Equivalently: a monomorphism $i : P \hookrightarrow T$ is also a monomorphism $i^d
-            : P^d \hookrightarrow T^d$, where $G^d$ is the graph with the same vertex set as
-            $G$, and an edge between $v$ and $w$ if the distance between $v$ and $w$ in $G$ is
-            at most $d$.
+        \vspace{1em}
 
-        \item This allows us to generate implied constraints: we're now trying to find a
-            mapping $i$ which is simultaneously a monomorphism $i : P \hookrightarrow T$, and
-            $i^2 : P^2 \hookrightarrow T^2$, and $i^3 : P^3 \hookrightarrow T^3$, and so on.
-    \end{itemize}
+        \centering
+        \begin{tikzpicture}
+            \node [vertex] (Pc) at (0, 0) { c };
+            \node [vertexc2] (Pd) at (1, 0) { d };
+            \node [vertex] (Pb) at (1, 1) { b };
+            \node [vertexc1] (Pa) at (0, 1) { a };
+
+            \draw [edge] (Pa) -- (Pb);
+            \draw [edge] (Pb) -- (Pc);
+            \draw [edge] (Pc) -- (Pd);
+            \draw [edge] (Pd) -- (Pb);
+            \draw [edge] (Pa) -- (Pc);
+
+            \node [anchor=center, font=\huge] at (2.565, 0.5) { $\not\hookrightarrow$ };
+
+            \node [vertexc1] (T1) at (4.13, 0.5) { 1 };
+            \node [vertex] (T5) at (5, 0) { 5 };
+            \node [vertex] (T6) at (6, 0) { 6 };
+            \node [vertex] (T3) at (6, 1) { 3 };
+            \node [vertex] (T2) at (5, 1) { 2 };
+            \node [vertexc2] (T4) at (6.87, 0.5) { 4 };
+
+            \draw [edge] (T1) -- (T2);
+            \draw [edge] (T1) -- (T5);
+            \draw [edge] (T4) -- (T3);
+            \draw [edge] (T4) -- (T6);
+            \draw [edge] (T2) -- (T6);
+            \draw [edge] (T2) -- (T3);
+            \draw [edge] (T3) -- (T5);
+            \draw [edge] (T5) -- (T6);
+            \draw [edge] (T3) -- (T6);
+            \draw [edge] (T2) -- (T5);
+
+            \node at (5, 1.5) { ~ };
+            \node at (5, -0.5) { ~ };
+        \end{tikzpicture}
+    }
+
+    \only<2> {
+        \begin{itemize}
+            \item $G^d$ is the graph with the same vertex set as $G$, and an edge between $v$ and $w$ if the distance between $v$ and $w$ in $G$ is
+                at most $d$.
+
+            \item For any $d$, a subgraph isomorphism $i : P \hookrightarrow T$ is also a
+                subgraph isomorphism $i^d : P^d \hookrightarrow T^d$.
+        \end{itemize}
+
+        \vspace{1em}
+
+        \centering
+        \begin{tikzpicture}
+            \node [vertex] (Pc) at (0, 0) { c };
+            \node [vertexc2] (Pd) at (1, 0) { d };
+            \node [vertex] (Pb) at (1, 1) { b };
+            \node [vertexc1] (Pa) at (0, 1) { a };
+
+            \draw [edge] (Pa) -- (Pb);
+            \draw [edge] (Pb) -- (Pc);
+            \draw [edge] (Pc) -- (Pd);
+            \draw [edge] (Pd) -- (Pb);
+            \draw [edge] (Pa) -- (Pc);
+
+            \draw [edgel3] (Pa) -- (Pd);
+
+            \node [anchor=center, font=\huge] at (2.565, 0.5) { $\not\hookrightarrow$ };
+
+            \node [vertexc1] (T1) at (4.13, 0.5) { 1 };
+            \node [vertex] (T5) at (5, 0) { 5 };
+            \node [vertex] (T6) at (6, 0) { 6 };
+            \node [vertex] (T3) at (6, 1) { 3 };
+            \node [vertex] (T2) at (5, 1) { 2 };
+            \node [vertexc2] (T4) at (6.87, 0.5) { 4 };
+
+            \draw [edge] (T1) -- (T2);
+            \draw [edge] (T1) -- (T5);
+            \draw [edge] (T4) -- (T3);
+            \draw [edge] (T4) -- (T6);
+            \draw [edge] (T2) -- (T6);
+            \draw [edge] (T2) -- (T3);
+            \draw [edge] (T3) -- (T5);
+            \draw [edge] (T5) -- (T6);
+            \draw [edge] (T3) -- (T6);
+            \draw [edge] (T2) -- (T5);
+
+            \draw [edgel3] (T1) to [in=135, out=90] (T3);
+            \draw [edgel3] (T1) to [in=225, out=270] (T6);
+
+            \draw [edgel3] (T4) to [in=45, out=90] (T2);
+            \draw [edgel3] (T4) to [in=315, out=270] (T5);
+
+            \node at (5, 1.5) { ~ };
+            \node at (5, -0.5) { ~ };
+        \end{tikzpicture}
+    }
+
+    \only<3> {
+        \begin{itemize}
+            \item This allows us to generate implied constraints: we're now trying to find a mapping
+                $i$ which is simultaneously a subgraph isomorphism $i : P \hookrightarrow T$, and
+                $i^2 : P^2 \hookrightarrow T^2$, and $i^3 : P^3 \hookrightarrow T^3$, and so on.
+
+            \item So we can filter on adjacency, degree, neighbourhood degree sequences, etc, in
+                these graphs too.  (Open question: we can take the intersection, but is there a
+                stronger operation which we can compute with reasonable complexity?)
+        \end{itemize}
+    }
 \end{frame}
 
 \begin{frame}{Path-Based Filtering}
     \begin{itemize}
         \item In practice, this only seems to be useful for $d \le 3$.
 
-        \item Stronger: if two vertices in the pattern graph are connected by $k$ (simple) paths of
+        \item Stronger: if two vertices in the pattern graph are connected by $k$ paths of
             length exactly $d$, then they can only be mapped to a pair of vertices which have at
             least $k$ paths of length exactly $d$ between them.
 
-        \item We can view this as a graph transformation too. Let $G^{\left[d, k\right]}$ be the
-            graph with the same vertex set as $G$, and an edge between $v$ and $w$ if there are at
-            least $k$ paths of length exactly $d$ between $v$ and $w$ in $G$.
+            \begin{itemize}
+                \item We can also look at cycles: a vertex in a cycle of length $k$ must be mapped to a
+                    vertex in a cycle of length $k$.
+            \end{itemize}
+
+        \item We can do this as using graph transformation too. Let $G^{\left[d, k\right]}$ be the
+            (loopy) graph with the same vertex set as $G$, and an edge between $v$ and $w$ if there are at
+            least $k$ paths or cycles of length exactly $d$ between $v$ and $w$ in $G$.
 
         \item This is \NP-hard to produce in general, but for $d \le 3$ and small $k$ we can
             calculate it quickly in practice.
@@ -225,13 +345,19 @@
     \begin{itemize}
         \item We just build these graphs once, at the top of search.
 
+            \begin{itemize}
+                \item We could recreate them whenever a vertex disappears from every target domain,
+                    but this is costly.
+            \end{itemize}
+
         \item Other transformations are sometimes helpful. We can either pick a good, general set,
             or use domain knowledge. Different transformations are helpful for other variations of
-            the problem (induced, directed, labels, etc).
+            the problem.
 
-        \item We can use these graph pairs to filter on neighbour degree sequences too.
-            Open question: we can take the intersection, but is there a stronger operation
-            which we can compute with reasonable complexity?
+            \begin{itemize}
+                \item For the induced variant, we can also look at $\overline{G}$.
+                \item And we can compose transformations.
+            \end{itemize}
     \end{itemize}
 \end{frame}
 
@@ -245,7 +371,9 @@
 
 \section{Counting All-Different}
 
-\begin{frame}{Enforcing All-Different}
+\frame{\sectionpage}
+
+\begin{frame}{Injectivity / Enforcing All-Different}
     \begin{itemize}
         \item When assigning $D_v \gets w$, remove $w$ from every other domain. If a domain ends up
             being empty, fail and backtrack.
@@ -253,6 +381,17 @@
         \item This enforces the constraint, but does not provide much additional inference.
     \end{itemize}
 \end{frame}
+
+\begin{frame}{Hall Sets}
+    \begin{itemize}
+        \item If we have a subset of $n$ variables, whose domains include exactly $n$ values between
+            them, then those values can \emph{only} be used by those variables.
+
+        \item If we have a subset of $n$ variables, whose domains include less than $n$ values
+            between them, then we cannot give every variable a different value.
+    \end{itemize}
+\end{frame}
+
 
 \begin{frame}{R\'egin's Matching-Based All-Different Filtering}
     \begin{itemize}
@@ -267,23 +406,12 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Hall Sets}
-    \begin{itemize}
-        \item Why can we do this? If we have a subset of $n$ variables, whose domains include
-            exactly $n$ values between them, then those values can \emph{only} be used by those
-            variables.
-
-        \item This is called a Hall set.
-    \end{itemize}
-\end{frame}
-
 \begin{frame}{All-Different Filtering via Counting}
     \begin{itemize}
         \item Go through each variable, from smallest domain to largest, and take the union of
             the domains as we go along.
 
-        \item If we reach a ``failed'' Hall set (less than $n$ values for the $n$ domains we've
-            seen so far), fail.
+        \item If we reach a failed Hall set, fail.
 
         \item If we reach a Hall set, remove all these values from every remaining domain, reset
             the counters, and keep going.
@@ -307,6 +435,8 @@
 \end{frame}
 
 \section{Backjumping}
+
+\frame{\sectionpage}
 
 \begin{frame}{Backtracking is Dumb}
     \begin{itemize}
@@ -374,7 +504,9 @@
 
 \section{Preliminary Results}
 
-\begin{frame}{So Is This Any Good?}
+\frame{\sectionpage}
+
+\begin{frame}{Is This Any Good?}
     \begin{itemize}
         \item Fast and dumb isn't really fashionable for CP.
 
@@ -444,23 +576,37 @@
 \section{}
 
 \begin{frame}{What's Next?}
-    \begin{itemize}
-        \item Proper thread parallelism (fiddly but possible with backjumping)
-            \begin{itemize}
-                \item Parallel diversity is a good alternative to discrepancy search.
-                \item Proper load balancing is necessary.
-                \item Lack of parallel supplemental graph construction means we can't ignore
-                    Amdahl's law.
-            \end{itemize}
-        \item All the variants (labels, directed edges, induced, \ldots)
-        \item Other supplemental graphs
-            \begin{itemize}
-                \item I can concoct additional supplemental graphs which can close half of the
-                    remaining open instances, but they're rather specific to the instances.
-            \end{itemize}
-        \item Symmetries and dominance?
-        \item Portfolios and instance-specific algorithm configuration?
-    \end{itemize}
+    \only<1> {
+        \begin{itemize}
+            \item Proper thread parallelism
+                \begin{itemize}
+                    \item Fiddly but possible with backjumping.
+                    \item Parallel diversity is a good alternative to discrepancy search.
+                    \item Proper load balancing is necessary.
+                    \item Lack of parallel supplemental graph construction means we can't ignore
+                        Amdahl's law.
+                \end{itemize}
+        \end{itemize}
+    }
+
+    \only<2> {
+        \begin{itemize}
+            \item All the variants (labels, directed edges, induced, \ldots)
+            \item Other supplemental graphs
+                \begin{itemize}
+                    \item I can concoct additional supplemental graphs which can close half of the
+                        remaining open instances, but they're rather specific to the instances.
+                \end{itemize}
+            \item Symmetries and dominance?
+            \item Portfolios and instance-specific algorithm configuration?
+        \end{itemize}
+    }
+
+    \only<3> {
+        \begin{itemize}
+            \item Better typesetting for $\overline{P} \not\hookrightarrow \overline{T}\,$?
+        \end{itemize}
+    }
 \end{frame}
 
 \begin{frame}[b]

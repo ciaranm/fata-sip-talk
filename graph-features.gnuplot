@@ -43,6 +43,7 @@ set nokey
 set xrange [60e3:86400e3]
 set xtics 0e3 add ("1m" 60e3) add ("1h" 3600e3) add ("1d" 86400e3) mirror
 set ytics mirror
+set mytics 2
 set yrange [1910:2030]
 set xlabel ""
 set ylabel ""

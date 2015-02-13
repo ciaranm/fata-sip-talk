@@ -14,9 +14,10 @@ set ylabel "Cumulative Number of Instances Solved" offset 3
 set logscale x
 set xtics nomirror
 set ytics nomirror add ('\raisebox{1mm}{2063}' 2063)
-set grid
+set grid xtics ytics mytics
 set xrange [1:1e8]
 set yrange [0:2063]
+set mytics 5
 set format x '$10^{%T}$'
 
 plot \
