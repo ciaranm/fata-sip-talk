@@ -34,7 +34,6 @@ plot \
     "graph-backjumping.data" u (($2 == 0 && $3 == 1) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 11 lc 7 notitle, \
     "graph-backjumping.data" u (($2 == 1 && $3 == 1) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 10 lc 7 notitle, \
     "graph-backjumping.data" u (($2 == 1 && $3 == 7) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 12 lc 2 notitle, \
-    "graph-backjumping.data" u (($2 == -1) ? ($5<1?1:$5) : NaN):($6<1?1:$6) pt 2 lc 0 ps 10 notitle, \
     x w l lt 1 lc 0 notitle, \
     NaN w p ps 1.5 pt 6 lc 1 ti "LV (sat)", \
     NaN w p ps 1.5 pt 7 lc 1 ti "LV (unsat)", \

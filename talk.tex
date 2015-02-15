@@ -58,6 +58,7 @@
 \tikzset{vertexc4/.style={vertex, fill=uofgtorange}}
 \tikzset{edge/.style={color=screengrey}}
 \tikzset{bedge/.style={ultra thick}}
+\tikzset{edged/.style={color=screengrey, dashed}}
 \tikzset{edgel1/.style={ultra thick, color=uofgblue}}
 \tikzset{edgel2/.style={ultra thick, color=uofgblue40}}
 \tikzset{edgel3/.style={ultra thick, color=uofgtdarkgreen}}
@@ -142,7 +143,7 @@
             injective mapping that preserves adjacency, but not necessarily non-adjacency.
     \end{itemize}
 
-    \vspace{1em}
+    \vspace{2em}
 
     \centering
     \begin{tikzpicture}
@@ -217,7 +218,7 @@
 
 \frame{\sectionpage}
 
-\begin{frame}{Distance-Based Filtering}
+\begin{frame}[b]{Distance-Based Filtering}
 
     \only<1> {
         \begin{itemize}
@@ -225,7 +226,7 @@
                 to a pair of vertices which are within distance $d$ (or less) in the target graph.
         \end{itemize}
 
-        \vspace{1em}
+        \vspace{2em}
 
         \centering
         \begin{tikzpicture}
@@ -260,9 +261,11 @@
             \draw [edge] (T3) -- (T6);
             \draw [edge] (T2) -- (T5);
 
-            \node at (5, 1.5) { ~ };
-            \node at (5, -0.5) { ~ };
+            \node at (5, 2) { ~ };
+            \node at (5, -1) { ~ };
         \end{tikzpicture}
+
+        \vspace{1em}
     }
 
     \only<2> {
@@ -317,24 +320,31 @@
             \draw [edgel3] (T4) to [in=45, out=90] (T2);
             \draw [edgel3] (T4) to [in=315, out=270] (T5);
 
-            \node at (5, 1.5) { ~ };
-            \node at (5, -0.5) { ~ };
+            \node at (5, 2) { ~ };
+            \node at (5, -1) { ~ };
         \end{tikzpicture}
+
+        \vspace{1em}
     }
+\end{frame}
 
-    \only<3> {
-        \begin{itemize}
-            \item This allows us to generate implied constraints: we're now trying to find a mapping
-                $i$ which is simultaneously a subgraph isomorphism $i : P \hookrightarrow T$, and
-                $i^2 : P^2 \hookrightarrow T^2$, and $i^3 : P^3 \hookrightarrow T^3$, and so on.
+\begin{frame}{Implied Constraints}
+    \begin{itemize}
+        \item We're now trying to find a mapping $i$ which is simultaneously a subgraph isomorphism
+            \[
+                \begin{array}{l@{\hskip 0.5cm}l@{\hskip 2mm}c@{\hskip 2mm}l@{\hskip 2mm}c@{\hskip 2mm}l}
+                    &i &:& P &\hookrightarrow& T \\
+                    \textnormal{and}& i^2 &:& P^2 &\hookrightarrow& T^2 \\
+                    \textnormal{and}& i^3 &:& P^3 &\hookrightarrow& T^3
+                \end{array}
+            \] and so on.
 
-            \item So we can filter on adjacency, degree, neighbourhood degree sequences, etc, in
-                these graph pairs too.
+        \item So we can filter on adjacency, degree, neighbourhood degree sequences, etc, in
+            these graph pairs too.
 
-            \item Open question: we can take the intersection, but is there a stronger operation
-                which we can compute with reasonable complexity?
-        \end{itemize}
-    }
+        \item Open question: we can take the intersection, but is there a stronger operation
+            which we can compute with reasonable complexity?
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Path-Based Filtering}
@@ -428,17 +438,103 @@
 \end{frame}
 
 \begin{frame}{All-Different Filtering via Counting}
-    \begin{itemize}
-        \item Go through each variable, from smallest domain to largest, and take the union of
-            the domains as we go along.
+    \only<1> {
+        \begin{itemize}
+            \item Go through each variable, from smallest domain to largest, and take the union of
+                the domains as we go along.
 
-        \item If we reach a failed Hall set, fail.
+            \item If we reach a failed Hall set, fail.
 
-        \item If we reach a Hall set, remove all these values from every remaining domain, reset
-            the counters, and keep going.
+            \item If we reach a Hall set, remove all these values from every remaining domain, reset
+                the counters, and keep going.
 
-        \item This is much faster, but may miss some deletions that matching would find.
-    \end{itemize}
+            \item This is much faster, especially when domains are already bitsets, but may miss
+                some deletions that matching would find.
+        \end{itemize}
+    }
+
+    \only<2-11> {
+        \centering
+        \begin{tikzpicture}
+
+            \node <1-4>  [vertex]   (Va) at (0, 6) { a };
+            \node <5-7>  [vertexc4] (Va) at (0, 6) { a };
+            \node <8->   [vertexc1] (Va) at (0, 6) { a };
+
+            \node <1-5>  [vertex]   (Vb) at (0, 5) { b };
+            \node <6-7>  [vertexc4] (Vb) at (0, 5) { b };
+            \node <8->   [vertexc1] (Vb) at (0, 5) { b };
+
+            \node <1-6>  [vertex]   (Vc) at (0, 4) { c };
+            \node <7>    [vertexc4] (Vc) at (0, 4) { c };
+            \node <8->   [vertexc1] (Vc) at (0, 4) { c };
+
+            \node <1-8>  [vertex]   (Vd) at (0, 3) { d };
+            \node <9>    [vertexc4] (Vd) at (0, 3) { d };
+            \node <10->  [vertexc1] (Vd) at (0, 3) { d };
+
+            \node <10->  [vertexc1] (Vd) at (0, 3) { d };
+
+            \node <1-10> [vertex]   (Ve) at (0, 2) { e };
+            \node <11->  [vertexc4] (Ve) at (0, 2) { e };
+
+            \node <2>    [vertex]   (Vf) at (0, 1) { f };
+            \node <3>    [vertexc4] (Vf) at (0, 1) { f };
+            \node <4->   [vertexc1] (Vf) at (0, 1) { f };
+
+            \node <1-4>  [vertex]   (V1) at (2, 6.5) { 1 };
+            \node <5-7>  [vertexc4] (V1) at (2, 6.5) { 1 };
+            \node <8->   [vertexc1] (V1) at (2, 6.5) { 1 };
+
+            \node <1-4>  [vertex]   (V2) at (2, 5.5) { 2 };
+            \node <5-7>  [vertexc4] (V2) at (2, 5.5) { 2 };
+            \node <8->   [vertexc1] (V2) at (2, 5.5) { 2 };
+
+            \node <1-5>  [vertex]   (V3) at (2, 4.5) { 3 };
+            \node <6-7>  [vertexc4] (V3) at (2, 4.5) { 3 };
+            \node <8->   [vertexc1] (V3) at (2, 4.5) { 3 };
+
+            \node <1-8>  [vertex]   (V4) at (2, 3.5) { 4 };
+            \node <9>    [vertexc4] (V4) at (2, 3.5) { 4 };
+            \node <10->  [vertexc1] (V4) at (2, 3.5) { 4 };
+
+            \node <1-10> [vertex]   (V5) at (2, 2.5) { 5 };
+            \node <11->  [vertexc4] (V5) at (2, 2.5) { 5 };
+
+            \node <1-10> [vertex]   (V6) at (2, 1.5) { 6 };
+            \node <11->  [vertexc4] (V6) at (2, 1.5) { 6 };
+
+            \node <2>    [vertex]   (V7) at (2, 0.5) { 7 };
+            \node <3>    [vertexc4] (V7) at (2, 0.5) { 7 };
+            \node <4->   [vertexc1] (V7) at (2, 0.5) { 7 };
+
+            \draw [edge] (Ve) -- (V5);
+            \draw [edge] (Ve) -- (V6);
+            \draw [edge] (Vd) -- (V4);
+            \draw [edge] (Vc) -- (V3);
+            \draw [edge] (Vc) -- (V1);
+            \draw [edge] (Vb) -- (V2);
+            \draw [edge] (Vb) -- (V3);
+            \draw [edge] (Va) -- (V1);
+            \draw [edge] (Va) -- (V2);
+            \draw [edge] (Vf) -- (V7);
+
+            \draw <2-7> [edge]  (Vd) -- (V3);
+            \draw <8->  [edged] (Vd) -- (V3);
+
+            \draw <2-3> [edge]  (Ve) -- (V7);
+            \draw <4->  [edged] (Ve) -- (V7);
+
+        \end{tikzpicture}
+    }
+
+    \only <12> {
+        \begin{itemize}
+            \item In this case we found both variable-value assignments which could never occur.
+
+            \item Had we done tie-breaking in a different order, we could have missed one of these.
+        \end{itemize}
+    }
 \end{frame}
 
 \begin{frame}{Is This Actually New?}
@@ -586,40 +682,44 @@
     }
 \end{frame}
 
-\section{}
+\begin{frame}{Proper Thread Parallelism?}
+    \begin{itemize}
+        \item Work order matters: parallel diversity is a good alternative to discrepancy search.
+
+        \item Proper load balancing is necessary.
+
+        \item Lack of parallel supplemental graph construction means we can't ignore
+            Amdahl's law.
+
+        \item Backjumping makes all this quite fiddly.
+            \begin{itemize}
+                \item It's easy to implement using Cilk, but we lose control of the work stealing
+                    strategy.
+                \item We could theoretically get an absolute slowdown due to backjumping. This is
+                    preventable by not ``sharing backwards'', but might not be worth it.
+            \end{itemize}
+    \end{itemize}
+\end{frame}
 
 \begin{frame}{What's Next?}
-    \only<1> {
-        \begin{itemize}
-            \item Proper thread parallelism
-                \begin{itemize}
-                    \item Fiddly but possible with backjumping.
-                    \item Parallel diversity is a good alternative to discrepancy search.
-                    \item Proper load balancing is necessary.
-                    \item Lack of parallel supplemental graph construction means we can't ignore
-                        Amdahl's law.
-                \end{itemize}
-        \end{itemize}
-    }
+    \begin{itemize}
+        \item All the variants (labels, directed edges, induced, \ldots)
 
-    \only<2> {
-        \begin{itemize}
-            \item All the variants (labels, directed edges, induced, \ldots)
-            \item Other supplemental graphs
-                \begin{itemize}
-                    \item I can concoct additional supplemental graphs which can close half of the
-                        remaining open instances, but they're rather specific to the instances.
-                \end{itemize}
-            \item Symmetries and dominance?
-            \item Portfolios and instance-specific algorithm configuration?
-        \end{itemize}
-    }
+        \item Other supplemental graphs
+            \begin{itemize}
+                \item I can concoct additional transformations which can close half of the remaining
+                    open instances, but they're rather specialised.
+            \end{itemize}
 
-    \only<3> {
-        \begin{itemize}
-            \item Better typesetting for $\overline{P} \not\hookrightarrow \overline{T}\,$?
-        \end{itemize}
-    }
+        \item Portfolios and instance-specific algorithm configuration?
+            \begin{itemize}
+                \item Does this legitimise special transformations?
+            \end{itemize}
+
+        \item Symmetries and dominance?
+
+        \item Better typesetting for $\overline{P} \not\hookrightarrow \overline{T}\,$?
+    \end{itemize}
 \end{frame}
 
 \begin{frame}[b]

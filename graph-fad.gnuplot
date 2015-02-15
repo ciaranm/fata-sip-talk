@@ -22,6 +22,9 @@ set grid xtics ytics mxtics mytics
 set format x '$10^{%T}$'
 set format y '$10^{%T}$'
 
+set label 1 'DVO' at 0.7e2,2e3 right offset character 0.6, character 0
+set arrow from 0.7e2,2e3 to 3e2,1.2e3 lw 1 back filled
+
 plot \
     "graph-fad.data" u (($2 == 0 && $3 == 2) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 7 lc 1 notitle, \
     "graph-fad.data" u (($2 == 1 && $3 == 2) ? ($5<1?1:$5) : NaN):($6<1?1:$6):(1) ps variable pt 6 lc 1 notitle, \
