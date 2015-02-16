@@ -16,11 +16,13 @@ set logscale xy
 set xtics nomirror
 set ytics nomirror
 set grid
-set xrange [1:1e11]
-set yrange [1:1e11]
+set xrange [1:1e10]
+set yrange [1:1e10]
 set grid xtics ytics mxtics mytics
 set format x '$10^{%T}$'
 set format y '$10^{%T}$'
+
+set title "Partial results: some instances still running"
 
 set label 1 'DVO' at 0.7e2,2e3 right offset character 0.6, character 0
 set arrow from 0.7e2,2e3 to 3e2,1.2e3 lw 1 back filled
