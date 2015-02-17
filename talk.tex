@@ -20,28 +20,42 @@
 \colorlet{screenverylightgrey}{black!2!white}
 \colorlet{screengrey}{black!30!white}
 
-\definecolor{uofgblue}{rgb}{0, 0.321569, 0.533333}
-\colorlet{uofgblue20}{uofgblue!20!white}
-\colorlet{uofgblue40}{uofgblue!40!white}
-\colorlet{uofgblue60}{uofgblue!60!white}
-\colorlet{uofgblue80}{uofgblue!80!white}
+\definecolor{uofguniversityblue}{rgb}{0, 0.219608, 0.396078}
+\colorlet{uofguniversityblue40}{uofguniversityblue!40!white}
 
-\definecolor{uofgstone}{rgb}{0.498039, 0.454902, 0.403922}
+\definecolor{uofgheather}{rgb}{0.356863, 0.32549, 0.490196}
+\definecolor{uofgaquamarine}{rgb}{0.603922, 0.72549, 0.678431}
+\definecolor{uofgslate}{rgb}{0.309804, 0.34902, 0.380392}
+\definecolor{uofgrose}{rgb}{0.823529, 0.470588, 0.709804}
+\definecolor{uofgmocha}{rgb}{0.709804, 0.564706, 0.47451}
 
-\definecolor{uofgtdarkgreen}{rgb}{0.380392, 0.564706, 0.501961}
-\definecolor{uofgtlightgreen}{rgb}{0.615686, 0.788235, 0.729412}
-\definecolor{uofgtyellow}{rgb}{0.85098, 0.827451, 0.643137}
-\definecolor{uofgtorange}{rgb}{0.784314, 0.694118, 0.545098}
+\definecolor{uofglawn}{rgb}{0.517647, 0.741176, 0}
+\definecolor{uofgcobalt}{rgb}{0, 0.615686, 0.92549}
+\definecolor{uofgturquoise}{rgb}{0, 0.709804, 0.819608}
+\definecolor{uofgsunshine}{rgb}{1.0, 0.862745, 0.211765}
+\definecolor{uofgpumpkin}{rgb}{1.0, 0.72549, 0.282353}
+\definecolor{uofgthistle}{rgb}{0.584314, 0.070588, 0.447059}
+\definecolor{uofgpillarbox}{rgb}{0.701961, 0.047059, 0}
+\definecolor{uofglavendar}{rgb}{0.356863, 0.301961, 0.580392}
+
+\colorlet{gp lt color 0}{uofguniversityblue}
+\colorlet{gp lt color 1}{uofglavendar}
+\colorlet{gp lt color 2}{uofglawn}
+\colorlet{gp lt color 3}{uofgturquoise}
+\colorlet{gp lt color 4}{uofgpumpkin}
+\colorlet{gp lt color 5}{uofgsunshine}
+\colorlet{gp lt color 6}{uofgcobalt}
+\colorlet{gp lt color 7}{uofgpillarbox}
 
 % {{{ theme things
 \useoutertheme[footline=authortitle]{miniframes}
 \useinnertheme{rectangles}
 
 \setbeamerfont{block title}{size={}}
-\setbeamercolor*{structure}{fg=uofgblue}
+\setbeamercolor*{structure}{fg=uofguniversityblue}
 \setbeamercolor*{palette primary}{use=structure,fg=black,bg=white}
-\setbeamercolor*{palette secondary}{use=structure,fg=black,bg=uofgblue40}
-\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=uofgblue}
+\setbeamercolor*{palette secondary}{use=structure,fg=black,bg=uofguniversityblue40}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=uofguniversityblue}
 \setbeamercolor*{palette quaternary}{fg=white,bg=black}
 
 \setbeamercolor*{titlelike}{parent=palette primary}
@@ -51,18 +65,14 @@
 \tikzset{vertex/.style={draw, circle, inner sep=0pt, minimum size=0.5cm, font=\small\bfseries}}
 \tikzset{notvertex/.style={vertex, color=white, text=black}}
 \tikzset{plainvertex/.style={vertex}}
-\tikzset{selectedvertex/.style={vertex, fill=uofgblue}}
-\tikzset{vertexc1/.style={vertex, fill=uofgblue40}}
-\tikzset{vertexc2/.style={vertex, fill=uofgblue}}
-\tikzset{vertexc3/.style={vertex, fill=uofgtdarkgreen}}
-\tikzset{vertexc4/.style={vertex, fill=uofgtorange}}
+\tikzset{vertexc1/.style={vertex, fill=uofgthistle}}
+\tikzset{vertexc2/.style={vertex, fill=uofgpumpkin}}
+\tikzset{vertexc3/.style={vertex, fill=uofgpillarbox}}
+\tikzset{vertexc4/.style={vertex, fill=uofgturquoise}}
 \tikzset{edge/.style={color=screengrey}}
 \tikzset{bedge/.style={ultra thick}}
 \tikzset{edged/.style={color=screengrey, dashed}}
-\tikzset{edgel1/.style={ultra thick, color=uofgblue}}
-\tikzset{edgel2/.style={ultra thick, color=uofgblue40}}
-\tikzset{edgel3/.style={ultra thick, color=uofgtdarkgreen}}
-\tikzset{edgel4/.style={ultra thick, color=uofgtorange}}
+\tikzset{edgel3/.style={color=uofgturquoise, ultra thick}}
 
 \setbeamertemplate{title page}
 {
@@ -79,7 +89,7 @@
 
     \begin{tikzpicture}[remember picture, overlay]
         \node at (current page.north west) {\begin{tikzpicture}[remember picture, overlay]\fill
-        [fill=uofgblue, anchor=north west] (0, 0) rectangle (\paperwidth, -1.5cm);\end{tikzpicture}};
+        [fill=uofguniversityblue, anchor=north west] (0, 0) rectangle (\paperwidth, -1.5cm);\end{tikzpicture}};
         \node [anchor=north west, shift={(0.2cm,-0.2cm)}] at (current page.north west) {\includegraphics*[keepaspectratio=true,scale=0.5]{UoG_keyline.eps}};
     \end{tikzpicture}
 }
@@ -120,7 +130,7 @@
 % }}}
 
 \title[The Subgraph Isomorphism Problem: Three New Ideas]{The Subgraph Isomorphism Problem: \\ Three New Ideas}
-\author[Ciaran McCreesh]{\textcolor{uofgblue}{Ciaran McCreesh} and Patrick Prosser}
+\author[Ciaran McCreesh]{\textcolor{uofguniversityblue}{Ciaran McCreesh} and Patrick Prosser}
 
 \begin{document}
 
@@ -729,7 +739,7 @@
 \end{center}
 \begin{tikzpicture}[remember picture, overlay]
     \node at (current page.north west) {\begin{tikzpicture}[remember picture, overlay]\fill
-    [fill=uofgblue, anchor=north west] (0, 0) rectangle (\paperwidth, -1.5cm);\end{tikzpicture}};
+    [fill=uofguniversityblue, anchor=north west] (0, 0) rectangle (\paperwidth, -1.5cm);\end{tikzpicture}};
     \node [anchor=north west, shift={(0.2cm,-0.2cm)}] at (current page.north west) {\includegraphics*[keepaspectratio=true,scale=0.5]{UoG_keyline.eps}};
 \end{tikzpicture}
 \end{frame}
